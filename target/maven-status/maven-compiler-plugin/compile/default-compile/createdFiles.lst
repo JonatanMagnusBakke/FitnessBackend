@@ -1,0 +1,11 @@
+com\mycompany\fitnessapp\GenericResource.class
+DBAccess\Facade.class
+DBAccess\DBAccessSingleton.class
+models\Exercise_.class
+models\Catagory.class
+models\Workout.class
+com\mycompany\fitnessapp\ApplicationConfig.class
+models\Exercise.class
+models\Catagory_.class
+models\Workout_.class
+DBAccess\DummyFacade.class
