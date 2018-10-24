@@ -12,6 +12,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import models.Catagory;
+import models.Exercise;
 import models.Workout;
 
 /**
@@ -23,6 +24,15 @@ public class Facade {
     
     public Facade(EntityManagerFactory emf){
         this.emf = emf;
+        Catagory c = new Catagory("Test Catagory");
+        //DBAccessSingleton.getInstance().createCatagory(c);
+        Workout w1 = new Workout("TestWorkout", "This is a dummy workout for testing", "https://image.shutterstock.com/image-vector/stick-figure-celebration-cheer-260nw-331595411.jpg");
+        w1.addExercise(new Exercise("FirstTestExercise", "This is the first test exercise", "https://image.shutterstock.com/image-vector/stick-figure-celebration-cheer-260nw-331595411.jpg"));
+        w1.addExercise(new Exercise("SecondTestExercise", "This is the second test exercise", "https://image.shutterstock.com/image-vector/stick-figure-celebration-cheer-260nw-331595411.jpg"));
+        w1.addExercise(new Exercise("ThirdTestExercise", "This is the third test exercise", "https://image.shutterstock.com/image-vector/stick-figure-celebration-cheer-260nw-331595411.jpg"));
+        w1.setCatagory(c);
+        createWorkout(w1);
+        System.out.println("Done");
     }
     
     private EntityManager getEntityManager(){
@@ -31,8 +41,13 @@ public class Facade {
     
     public  void createWorkout(Workout w){
         EntityManager em = getEntityManager();
-//        Catagory c = em.find(Catagory.class, w.getCatagory().getId());
-//        w.setCatagory(c);
+        Catagory c = em.find(Catagory.class, w.getCatagory().getCatagory());
+        if(c == null)
+        {
+            createCatagory(w.getCatagory());
+            c = em.find(Catagory.class, w.getCatagory().getCatagory());
+        }
+        w.setCatagory(c);
         em.getTransaction().begin();
         em.persist(w);
         em.getTransaction().commit();
