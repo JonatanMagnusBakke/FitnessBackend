@@ -5,6 +5,8 @@
     <class>models.Workout</class>
     <class>models.Exercise</class>
     <class>models.Catagory</class>
+    <class>models.User</class>
+    <class>models.WorkoutHistory</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://159.65.23.37:3306/fitnessapp?zeroDateTimeBehavior=convertToNull"/>

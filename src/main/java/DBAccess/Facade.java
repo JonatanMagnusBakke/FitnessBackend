@@ -13,7 +13,9 @@ import javax.persistence.Persistence;
 import javax.persistence.Query;
 import models.Catagory;
 import models.Exercise;
+import models.User;
 import models.Workout;
+import models.WorkoutHistory;
 
 /**
  *
@@ -53,6 +55,40 @@ public class Facade {
         em.getTransaction().commit();
     }
     
+    public void createUser(User u)
+    {
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+        em.persist(u);
+        em.getTransaction().commit();
+    }
+    
+    public List<User> getAllUsers()
+    {
+        List<User> list = null;
+        EntityManager em = getEntityManager();
+        list = (List<User>)em.createQuery("SELECT u FROM User u").getResultList();
+        return list;
+    }
+    
+    public void addWorkoutHistoryToUser(long id, WorkoutHistory wh)
+    {
+        EntityManager em = getEntityManager();
+        User u = em.find(User.class, id);
+        em.getTransaction().begin();
+        u.addWorkoutToHistory(wh);
+        em.getTransaction().commit();
+    }
+    
+    public void addWorkoutHistoryToUser(String username, WorkoutHistory wh)
+    {
+        EntityManager em = getEntityManager();
+        User u = (User)em.createQuery("SELECT u FROM User u WHERE u.username = '" + username + "'").getSingleResult();
+        em.getTransaction().begin();
+        u.addWorkoutToHistory(wh);
+        em.getTransaction().commit();
+    }
+    
     public void createCatagory(Catagory c)
     {
         EntityManager em = getEntityManager();
@@ -70,6 +106,13 @@ public class Facade {
         return list;
     }
     
+    public User getUserByUsername(String s)
+    {
+        EntityManager em = getEntityManager();
+        User u = (User)em.createQuery("SELECT u FROM User u WHERE u.username = '" + s + "'").getSingleResult();
+        return u;
+    }
+    
     public List<Catagory> getAllCatagorys()
     {
         List<Catagory> list = new ArrayList<Catagory>();
@@ -83,6 +126,12 @@ public class Facade {
     {
         EntityManager em = getEntityManager();
         return em.find(Workout.class, id);
+    }
+    
+    public User getUserById(long id)
+    {
+        EntityManager em = getEntityManager();
+        return em.find(User.class, id);
     }
     
     public boolean removeWorkout(long id)

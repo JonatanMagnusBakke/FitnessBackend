@@ -9,7 +9,9 @@ import java.util.ArrayList;
 import javax.persistence.Persistence;
 import models.Catagory;
 import models.Exercise;
+import models.User;
 import models.Workout;
+import models.WorkoutHistory;
 
 /**
  *
@@ -48,6 +50,10 @@ public class DBAccessSingleton {
         w1.addExercise(new Exercise("ThirdTestExercise", "This is the third test exercise", "https://image.shutterstock.com/image-vector/stick-figure-celebration-cheer-260nw-331595411.jpg"));
         w1.setCatagory(c);
         DBAccessSingleton.getInstance().createWorkout(w1);
+        
+        DBAccessSingleton.getInstance().createUser(new User("jbakke", "Jonatan", "Bakke", "pw"));
+        
+        DBAccessSingleton.getInstance().addWorkoutHistoryToUser("jbakke", new WorkoutHistory("test", "today"));
         System.out.println("Done");
     }
 }

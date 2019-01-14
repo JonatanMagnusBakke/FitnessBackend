@@ -7,7 +7,7 @@ import javax.persistence.metamodel.StaticMetamodel;
 import models.Catagory;
 import models.Exercise;
 
-@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2018-10-24T15:17:23")
+@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2019-01-13T19:24:30")
 @StaticMetamodel(Workout.class)
 public class Workout_ { 
 
