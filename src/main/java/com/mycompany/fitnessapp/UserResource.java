@@ -21,6 +21,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import models.Catagory;
+import models.Errormessage;
 import models.User;
 import models.Workout;
 import models.WorkoutHistory;
@@ -59,27 +60,29 @@ public class UserResource {
      */
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response putJson(String content) {
+    @Produces(MediaType.APPLICATION_JSON)
+    public String putJson(String content) {
         User u = gson.fromJson(content, User.class);
-        try{
-            DBAccessSingleton.getInstance().createUser(u);
-        }
-        catch(Exception e)
+        boolean res = DBAccessSingleton.getInstance().createUser(u);
+        if(res == false)
         {
-            return Response.serverError().build();
+            return gson.toJson(new Errormessage(true));
         }
-        return Response.ok().build();
+        
+        
+        return gson.toJson(new Errormessage(false));
     }
     
     @Path("/{id}")
     @GET
-    public Response getUser(@PathParam("id") long id) {
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getUser(@PathParam("id") long id) {
         User res = DBAccessSingleton.getInstance().getUserById(id);
         if(res == null)
         {
-            return Response.status(404).build();
+            return gson.toJson(new Errormessage(true));
         }
-        return Response.ok().entity(gson.toJson(res)).build();
+        return gson.toJson(res);
     }
     
     @Path("/{id}")
@@ -91,4 +94,62 @@ public class UserResource {
         return Response.ok().build();
     }
     
+    
+    @Path("/{id}/favorites/{id2}")
+    @GET
+    public String getUserFavorites(@PathParam("id") long id, @PathParam("id2") long id2)
+    {
+        boolean res = DBAccessSingleton.getInstance().addWorkoutToFavorite(id, id2);
+        if(res)
+        {
+            return gson.toJson(new Errormessage(false));
+        }
+        return gson.toJson(new Errormessage(true));
+        
+    }
+    
+    @Path("/{id}/removefavorites/{id2}")
+    @GET
+    public String removeUserFavorites(@PathParam("id") long id, @PathParam("id2") long id2)
+    {
+        boolean res = DBAccessSingleton.getInstance().removeWorkoutFromFavorites(id, id2);
+        if(res)
+        {
+            return gson.toJson(new Errormessage(false));
+        }
+        return gson.toJson(new Errormessage(true));
+        
+    }
+    
+    @Path("/login")
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String login(String content)
+    {
+        User u = gson.fromJson(content, User.class);
+        User res = DBAccessSingleton.getInstance().login(u.getUsername(), u.getPassword());
+        if(res == null)
+        {
+            return gson.toJson(new Errormessage(true));
+        }
+        
+        String person = gson.toJson(res);
+        return person;
+    }
+    @Path("/register")
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String addUser(String content) {
+        User u = gson.fromJson(content, User.class);
+        boolean res = DBAccessSingleton.getInstance().createUser(u);
+        if(res == false)
+        {
+            return gson.toJson(new Errormessage(true));
+        }
+        
+        
+        return gson.toJson(new Errormessage(false));
+    }
 }

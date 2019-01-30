@@ -1,10 +1,12 @@
 E:\FitnessBackend\FitnessBackend\src\main\java\com\mycompany\fitnessapp\ApplicationConfig.java
 E:\FitnessBackend\FitnessBackend\src\main\java\models\Exercise.java
+E:\FitnessBackend\FitnessBackend\src\main\java\models\Catagory.java
+E:\FitnessBackend\FitnessBackend\src\main\java\models\Errormessage.java
 E:\FitnessBackend\FitnessBackend\src\main\java\models\User.java
 E:\FitnessBackend\FitnessBackend\src\main\java\DBAccess\Facade.java
-E:\FitnessBackend\FitnessBackend\src\main\java\models\Catagory.java
 E:\FitnessBackend\FitnessBackend\src\main\java\models\Workout.java
 E:\FitnessBackend\FitnessBackend\src\main\java\com\mycompany\fitnessapp\GenericResource.java
+E:\FitnessBackend\FitnessBackend\src\main\java\com\mycompany\fitnessapp\GeneratorData.java
 E:\FitnessBackend\FitnessBackend\src\main\java\com\mycompany\fitnessapp\UserResource.java
 E:\FitnessBackend\FitnessBackend\src\main\java\models\WorkoutHistory.java
 E:\FitnessBackend\FitnessBackend\src\main\java\DBAccess\DBAccessSingleton.java

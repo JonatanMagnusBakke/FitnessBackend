@@ -104,12 +104,20 @@ public class GenericResource {
     
     @Path("/catagorys/{id}")
     @DELETE
-    public Response deleteCatagory(@PathParam("id") long id) {
+    public Response deleteCatagory(@PathParam("id") String id) {
         boolean res = DBAccessSingleton.getInstance().removeCatagory(id);
         if(!res)
         {
             return Response.status(404).build();
         }
+        return Response.ok().build();
+    }
+    
+    @Path("/generate")
+    @GET
+    public Response generate()
+    {
+        GeneratorData.generateData();
         return Response.ok().build();
     }
 }

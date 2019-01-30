@@ -5,6 +5,7 @@
  */
 package DBAccess;
 
+import com.mycompany.fitnessapp.GeneratorData;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -26,15 +27,15 @@ public class Facade {
     
     public Facade(EntityManagerFactory emf){
         this.emf = emf;
-        Catagory c = new Catagory("Test Catagory");
-        //DBAccessSingleton.getInstance().createCatagory(c);
-        Workout w1 = new Workout("TestWorkout", "This is a dummy workout for testing", "https://image.shutterstock.com/image-vector/stick-figure-celebration-cheer-260nw-331595411.jpg");
-        w1.addExercise(new Exercise("FirstTestExercise", "This is the first test exercise", "https://image.shutterstock.com/image-vector/stick-figure-celebration-cheer-260nw-331595411.jpg"));
-        w1.addExercise(new Exercise("SecondTestExercise", "This is the second test exercise", "https://image.shutterstock.com/image-vector/stick-figure-celebration-cheer-260nw-331595411.jpg"));
-        w1.addExercise(new Exercise("ThirdTestExercise", "This is the third test exercise", "https://image.shutterstock.com/image-vector/stick-figure-celebration-cheer-260nw-331595411.jpg"));
-        w1.setCatagory(c);
-        createWorkout(w1);
-        System.out.println("Done");
+//        Catagory c = new Catagory("Test Catagory");
+//        //DBAccessSingleton.getInstance().createCatagory(c);
+//        Workout w1 = new Workout("TestWorkout", "This is a dummy workout for testing", "https://image.shutterstock.com/image-vector/stick-figure-celebration-cheer-260nw-331595411.jpg");
+//        w1.addExercise(new Exercise("FirstTestExercise", "This is the first test exercise", "https://image.shutterstock.com/image-vector/stick-figure-celebration-cheer-260nw-331595411.jpg"));
+//        w1.addExercise(new Exercise("SecondTestExercise", "This is the second test exercise", "https://image.shutterstock.com/image-vector/stick-figure-celebration-cheer-260nw-331595411.jpg"));
+//        w1.addExercise(new Exercise("ThirdTestExercise", "This is the third test exercise", "https://image.shutterstock.com/image-vector/stick-figure-celebration-cheer-260nw-331595411.jpg"));
+//        w1.setCatagory(c);
+//        createWorkout(w1);
+//        System.out.println("Done");
     }
     
     private EntityManager getEntityManager(){
@@ -55,12 +56,18 @@ public class Facade {
         em.getTransaction().commit();
     }
     
-    public void createUser(User u)
+    public boolean createUser(User u)
     {
-        EntityManager em = getEntityManager();
-        em.getTransaction().begin();
-        em.persist(u);
-        em.getTransaction().commit();
+        User ref = getUserByUsername(u.getUsername());
+        if(ref == null)
+        {
+            EntityManager em = getEntityManager();
+            em.getTransaction().begin();
+            em.persist(u);
+            em.getTransaction().commit();
+            return true;
+        }
+        return false;
     }
     
     public List<User> getAllUsers()
@@ -78,6 +85,40 @@ public class Facade {
         em.getTransaction().begin();
         u.addWorkoutToHistory(wh);
         em.getTransaction().commit();
+    }
+    
+    public boolean addWorkoutToFavorite(long userId, long workOutId)
+    {
+        EntityManager em = getEntityManager();
+        User u = em.find(User.class, userId);
+        if(u == null)
+        {
+            return false;
+        }
+        Workout ref = em.find(Workout.class, workOutId);
+        em.getTransaction().begin();
+        boolean res = u.addWorkoutToFavorite(ref);
+        em.getTransaction().commit();
+        return res;
+    }
+    
+    public boolean removeWorkoutFromFavorites(long userId, long workoutId)
+    {
+        EntityManager em = getEntityManager();
+        User u = em.find(User.class, userId);
+        if(u == null)
+        {
+            return false;
+        }
+        Workout ref = em.find(Workout.class, workoutId);
+        if(ref == null)
+        {
+            return false;
+        }
+        em.getTransaction().begin();
+        boolean res = u.removeFromFavorites(workoutId);
+        em.getTransaction().commit();
+        return res;
     }
     
     public void addWorkoutHistoryToUser(String username, WorkoutHistory wh)
@@ -108,9 +149,29 @@ public class Facade {
     
     public User getUserByUsername(String s)
     {
+        User u = null;
         EntityManager em = getEntityManager();
-        User u = (User)em.createQuery("SELECT u FROM User u WHERE u.username = '" + s + "'").getSingleResult();
+        try{
+        u = (User)em.createQuery("SELECT u FROM User u WHERE u.username = '" + s + "'").getSingleResult();
+        } catch(Exception e)
+        {
+            return null;
+        }
         return u;
+    }
+    
+    public User login(String username, String password)
+    {
+        User u = getUserByUsername(username);
+        if(u == null)
+        {
+            return null;
+        }
+        if(u.getPassword().equals(password))
+        {
+            return u;
+        }
+        return null;
     }
     
     public List<Catagory> getAllCatagorys()
@@ -151,7 +212,7 @@ public class Facade {
         return true;
     }
     
-    public boolean removeCatagory(long id)
+    public boolean removeCatagory(String id)
     {
         try{
             

@@ -34,6 +34,11 @@ public class User implements Serializable {
     @OneToMany(cascade = CascadeType.PERSIST)
     private List<WorkoutHistory> workoutHistory = new ArrayList<>();
     
+    @OneToMany
+    private List<Workout> favorites = new ArrayList<>();
+    
+    
+    
     public User() {
     }
 
@@ -44,6 +49,36 @@ public class User implements Serializable {
         this.password = password;
     }
 
+    public List<Workout> getFavorites() {
+        return favorites;
+    }
+
+    public void setFavorites(List<Workout> favorites) {
+        this.favorites = favorites;
+    }
+
+    public boolean addWorkoutToFavorite(Workout w)
+    {
+        if(!favorites.contains(w))
+        {
+            this.favorites.add(w);
+            return true;
+        }
+        return false;
+    }
+    public boolean removeFromFavorites(long id)
+    {
+        for(Workout w : favorites)
+        {
+            if(w.getId() == id)
+            {
+                favorites.remove(w);
+                return true;
+            }
+        }
+        return false;
+    }
+    
     public List<WorkoutHistory> getWorkoutHistory() {
         return workoutHistory;
     }
@@ -132,8 +167,10 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "User{" + "id=" + id + ", username=" + username + ", firstName=" + firstName + ", lastName=" + lastName + ", password=" + password + '}';
+        return "User{" + "id=" + id + ", username=" + username + ", firstName=" + firstName + ", lastName=" + lastName + ", password=" + password + ", workoutHistory=" + workoutHistory + ", favorites=" + favorites + '}';
     }
+
+    
 
     
     

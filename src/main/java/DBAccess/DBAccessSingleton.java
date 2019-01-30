@@ -5,6 +5,7 @@
  */
 package DBAccess;
 
+import com.mycompany.fitnessapp.GeneratorData;
 import java.util.ArrayList;
 import javax.persistence.Persistence;
 import models.Catagory;
@@ -41,19 +42,6 @@ public class DBAccessSingleton {
     
     public static void main(String[] args)
     {
-        Persistence.generateSchema("FitnessAppPer", null);
-        Catagory c = new Catagory("Test Catagory");
-        //DBAccessSingleton.getInstance().createCatagory(c);
-        Workout w1 = new Workout("TestWorkout", "This is a dummy workout for testing", "https://image.shutterstock.com/image-vector/stick-figure-celebration-cheer-260nw-331595411.jpg");
-        w1.addExercise(new Exercise("FirstTestExercise", "This is the first test exercise", "https://image.shutterstock.com/image-vector/stick-figure-celebration-cheer-260nw-331595411.jpg"));
-        w1.addExercise(new Exercise("SecondTestExercise", "This is the second test exercise", "https://image.shutterstock.com/image-vector/stick-figure-celebration-cheer-260nw-331595411.jpg"));
-        w1.addExercise(new Exercise("ThirdTestExercise", "This is the third test exercise", "https://image.shutterstock.com/image-vector/stick-figure-celebration-cheer-260nw-331595411.jpg"));
-        w1.setCatagory(c);
-        DBAccessSingleton.getInstance().createWorkout(w1);
-        
-        DBAccessSingleton.getInstance().createUser(new User("jbakke", "Jonatan", "Bakke", "pw"));
-        
-        DBAccessSingleton.getInstance().addWorkoutHistoryToUser("jbakke", new WorkoutHistory("test", "today"));
-        System.out.println("Done");
+        GeneratorData.generateData();
     }
 }

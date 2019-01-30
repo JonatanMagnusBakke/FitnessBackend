@@ -4,6 +4,7 @@ models\Exercise_.class
 models\User.class
 models\Workout.class
 com\mycompany\fitnessapp\ApplicationConfig.class
+com\mycompany\fitnessapp\GeneratorData.class
 com\mycompany\fitnessapp\UserResource.class
 models\Catagory_.class
 models\Workout_.class
@@ -12,5 +13,6 @@ DBAccess\Facade.class
 DBAccess\DBAccessSingleton.class
 models\Catagory.class
 models\WorkoutHistory_.class
+models\Errormessage.class
 models\Exercise.class
 DBAccess\DummyFacade.class
